@@ -7,8 +7,8 @@ import VoiceMessage from "../components/VoiceMessage";
 import avatarDefault from "../assets/profile.png";
 import { jwtDecode } from "jwt-decode";
 import { v4 as uuidv4 } from "uuid"; // npm install uuid
-import { Picker } from 'emoji-mart';
-import 'emoji-mart/css/emoji-mart.css';
+import EmojiPicker from "emoji-picker-react";
+
 
 export default function Chat() {
   const navigate = useNavigate();
