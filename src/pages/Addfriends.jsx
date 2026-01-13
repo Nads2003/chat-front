@@ -10,9 +10,23 @@ export default function Addfriends() {
   const token = localStorage.getItem("access");
 
   // 🔹 Lire le mode actuel depuis localStorage
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+ const [darkMode, setDarkMode] = useState(
+  document.documentElement.classList.contains("dark")
+);
+
+useEffect(() => {
+  const observer = new MutationObserver(() => {
+    setDarkMode(document.documentElement.classList.contains("dark"));
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+
+  return () => observer.disconnect();
+}, []);
+
 
   useEffect(() => {
     const fetchNonAmis = async () => {

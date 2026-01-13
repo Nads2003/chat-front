@@ -5,6 +5,7 @@ import AuthProvider from "./context/AuthContext";
 import Chat from "./pages/Chat";
 import PrivateRoute from "./components/PrivateRoute"
 import Addfriends from "./pages/Addfriends";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -27,6 +28,14 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Addfriends />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/profil"
+            element={
+              <PrivateRoute>
+                < Profile/>
               </PrivateRoute>
             }
           />
