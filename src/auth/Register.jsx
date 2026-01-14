@@ -39,19 +39,19 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-black px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-slate-800 p-8 rounded-xl w-96 shadow-xl"
+        className="w-full sm:w-[90%] md:w-[400px] bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-2xl"
       >
-        <h2 className="text-2xl font-bold text-center mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">
           Créer un compte
         </h2>
 
         <input
           name="username"
           placeholder="Nom d'utilisateur"
-          className="w-full p-3 mb-4 rounded bg-slate-700 outline-none"
+          className="w-full p-3 mb-4 rounded-xl bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 transition"
           onChange={handleChange}
           required
         />
@@ -60,7 +60,7 @@ export default function Register() {
           name="email"
           type="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 rounded bg-slate-700 outline-none"
+          className="w-full p-3 mb-4 rounded-xl bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 transition"
           onChange={handleChange}
           required
         />
@@ -69,7 +69,7 @@ export default function Register() {
           name="password"
           type="password"
           placeholder="Mot de passe"
-          className="w-full p-3 mb-4 rounded bg-slate-700 outline-none"
+          className="w-full p-3 mb-4 rounded-xl bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 transition"
           onChange={handleChange}
           required
         />
@@ -78,12 +78,12 @@ export default function Register() {
           name="confirm"
           type="password"
           placeholder="Confirmer le mot de passe"
-          className="w-full p-3 mb-6 rounded bg-slate-700 outline-none"
+          className="w-full p-3 mb-6 rounded-xl bg-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 transition"
           onChange={handleChange}
           required
         />
 
-        <button className="w-full bg-emerald-600 hover:bg-emerald-700 p-3 rounded font-semibold">
+        <button className="w-full bg-emerald-600 hover:bg-emerald-700 p-3 rounded-xl font-semibold transition">
           S'inscrire
         </button>
 
@@ -91,7 +91,7 @@ export default function Register() {
           Déjà un compte ?{" "}
           <span
             onClick={() => navigate("/")}
-            className="text-indigo-400 cursor-pointer"
+            className="text-indigo-400 cursor-pointer hover:underline"
           >
             Se connecter
           </span>

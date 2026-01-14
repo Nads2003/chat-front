@@ -1,43 +1,35 @@
-import { useState,useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { User, Lock } from "lucide-react";
 
 export default function Login() {
   const { login } = useContext(AuthContext);
-  const navigate = useNavigate(); // pour rediriger vers register
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // 🔐 Redirection si déjà connecté
-  // useEffect(() => {
-  //   if (localStorage.getItem("access")) {
-  //     navigate("/chat");
-  //   }
-  // }, [navigate]);
-   const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     await login(username, password);
-    navigate("/add"); // 🔥 REDIRECTION ICI
+    navigate("/add");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-black">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-black px-4">
       {/* Card gradient */}
-      <div className="w-full max-w-md p-[2px] rounded-2xl bg-gradient-to-r from-indigo-500 to-emerald-500 shadow-2xl">
-        <form
-          onSubmit={handleSubmit}
-          className="bg-slate-900 rounded-2xl p-8"
-        >
+      <div className="w-full sm:w-[90%] md:w-[400px] p-[2px] rounded-2xl bg-gradient-to-r from-indigo-500 to-emerald-500 shadow-2xl">
+        <form className="bg-slate-900 rounded-2xl p-6 sm:p-8" onSubmit={handleSubmit}>
           {/* Titre */}
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold">Connexion</h2>
-            <p className="text-slate-400 text-sm mt-2">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold">Connexion</h2>
+            <p className="text-slate-400 text-sm mt-1 sm:mt-2">
               Accédez à votre espace personnel
             </p>
           </div>
 
           {/* Username */}
-          <div className="relative mb-5">
+          <div className="relative mb-4 sm:mb-5">
             <User className="absolute left-3 top-3.5 text-slate-400" size={20} />
             <input
               type="text"
@@ -49,7 +41,7 @@ export default function Login() {
           </div>
 
           {/* Password */}
-          <div className="relative mb-6">
+          <div className="relative mb-5 sm:mb-6">
             <Lock className="absolute left-3 top-3.5 text-slate-400" size={20} />
             <input
               type="password"
