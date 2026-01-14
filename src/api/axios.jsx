@@ -1,8 +1,14 @@
 import axios from "axios";
 
-// Mettre ton backend Railway ici
+// Détecter si on est en prod ou local
+const isProd = window.location.hostname !== "localhost";
+
+const BASE_URL = isProd
+  ? "https://web-production-6a3e3.up.railway.app/api" // Production
+  : "http://127.0.0.1:8000/api"; // Local
+
 const api = axios.create({
-  baseURL: "https://web-production-6a3e3.up.railway.app/api",
+  baseURL: BASE_URL,
 });
 
 api.interceptors.request.use((config) => {

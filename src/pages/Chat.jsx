@@ -51,7 +51,14 @@ const [showPicker, setShowPicker] = useState(false);
   };
 
   // Messages + WebSocket
-  useEffect(() => {
+ // Détecter si on est en prod ou local
+const isProd = window.location.hostname !== "localhost";
+
+const WS_BASE_URL = isProd
+  ? "wss://web-production-6a3e3.up.railway.app/ws/chat" // prod (wss pour HTTPS)
+  : "ws://127.0.0.1:8000/ws/chat"; // local (ws)
+
+useEffect(() => {
   if (!conversationId || !token) return;
 
   api.get(`/friends/messages/${conversationId}/`)
@@ -60,9 +67,8 @@ const [showPicker, setShowPicker] = useState(false);
 
   if (socketRef.current) socketRef.current.close();
 
-  const ws = new WebSocket(
-    `ws://127.0.0.1:8000/ws/chat/${conversationId}/?token=${token}`
-  );
+  // Construire le WebSocket avec la bonne base
+  const ws = new WebSocket(`${WS_BASE_URL}/${conversationId}/?token=${token}`);
 
   socketRef.current = ws;
 
@@ -71,22 +77,19 @@ const [showPicker, setShowPicker] = useState(false);
     setSocketReady(true);
   };
 
- ws.onmessage = (e) => {
-  const data = JSON.parse(e.data);
+  ws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
 
-  setMessages(prev => {
-    const index = prev.findIndex(m => m.localId === data.localId);
-    if (index !== -1) {
-      const copy = [...prev];
-      copy[index] = data;
-      return copy;
-    }
-    // Ajouter le vocal instantanément
-    return [...prev, data];
-  });
-};
-
-
+    setMessages(prev => {
+      const index = prev.findIndex(m => m.localId === data.localId);
+      if (index !== -1) {
+        const copy = [...prev];
+        copy[index] = data;
+        return copy;
+      }
+      return [...prev, data];
+    });
+  };
 
   ws.onclose = () => {
     console.log("❌ WebSocket fermé");
