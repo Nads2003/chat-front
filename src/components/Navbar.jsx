@@ -1,19 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Sun, Moon, Bell } from "lucide-react";
+import { Sun, Moon, Bell, Menu, X } from "lucide-react";
 import avatar from "../assets/profile.png";
+
 export default function Navbar() {
   const navigate = useNavigate();
 
-  // ⚡️ État mode clair/sombre
+  // ⚡️ Mode sombre / clair
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
 
-  // Nombre de notifications (mock pour l’instant)
+  // Menu mobile
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Notifications mock
   const [notifications, setNotifications] = useState(3);
 
-  // Appliquer le mode
+  // Appliquer mode
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -25,8 +29,8 @@ export default function Navbar() {
   }, [darkMode]);
 
   const toggleTheme = () => setDarkMode(!darkMode);
+  const toggleMobileMenu = () => setMobileOpen(!mobileOpen);
 
-  // Déconnexion avec confirmation
   const handleLogout = () => {
     const confirmed = window.confirm("🔒 Voulez-vous vraiment vous déconnecter ?");
     if (confirmed) {
@@ -34,6 +38,12 @@ export default function Navbar() {
       navigate("/");
     }
   };
+
+  // Liens de navigation
+  const navLinks = [
+    { name: "Chat", path: "/chat" },
+    { name: "Amis", path: "/add" },
+  ];
 
   return (
     <nav
@@ -48,21 +58,17 @@ export default function Navbar() {
         💬 MyChatApp
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Navigation */}
-        <button
-          className={`hover:underline ${darkMode ? "text-white" : "text-black"}`}
-          onClick={() => navigate("/chat")}
-        >
-          Chat
-        </button>
-
-        <button
-          className={`hover:underline ${darkMode ? "text-white" : "text-black"}`}
-          onClick={() => navigate("/add")}
-        >
-          Ajouter des amis
-        </button>
+      {/* Menu Desktop */}
+      <div className="hidden md:flex items-center gap-4">
+        {navLinks.map(link => (
+          <button
+            key={link.name}
+            className={`hover:underline ${darkMode ? "text-white" : "text-black"}`}
+            onClick={() => navigate(link.path)}
+          >
+            {link.name}
+          </button>
+        ))}
 
         {/* Notifications */}
         <div className="relative">
@@ -76,11 +82,10 @@ export default function Navbar() {
           >
             <Bell size={20} />
           </button>
-
           {notifications > 0 && (
             <span
               className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full text-xs
-                ${darkMode ? "bg-red-500 text-white" : "bg-red-500 text-white"}`}
+                bg-red-500 text-white`}
             >
               {notifications}
             </span>
@@ -114,6 +119,45 @@ export default function Navbar() {
           Déconnexion
         </button>
       </div>
+
+      {/* Menu Mobile Hamburger */}
+      <div className="md:hidden flex items-center gap-2">
+        <button
+          className={`p-2 rounded-full hover:bg-slate-300 transition
+            ${darkMode ? "hover:bg-slate-700 text-white" : "hover:bg-gray-200 text-black"}`}
+          onClick={toggleTheme}
+        >
+          {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+
+        <button onClick={toggleMobileMenu}>
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Menu Mobile Dropdown */}
+      {mobileOpen && (
+        <div className={`absolute top-16 left-0 w-full bg-white dark:bg-slate-800 shadow-md flex flex-col p-4 md:hidden z-50`}>
+          {navLinks.map(link => (
+            <button
+              key={link.name}
+              className={`py-2 text-left hover:underline ${darkMode ? "text-white" : "text-black"}`}
+              onClick={() => {
+                navigate(link.path);
+                setMobileOpen(false);
+              }}
+            >
+              {link.name}
+            </button>
+          ))}
+          <button
+            className={`py-2 text-left hover:underline ${darkMode ? "text-white" : "text-black"}`}
+            onClick={handleLogout}
+          >
+            Déconnexion
+          </button>
+        </div>
+      )}
     </nav>
   );
 }
