@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
+import avatarDefault from "../assets/profile.png";
+
 
 export default function Addfriends() {
   const [nonAmis, setNonAmis] = useState([]);
@@ -134,7 +136,15 @@ useEffect(() => {
                 className={`flex justify-between items-center mb-2 p-2 rounded
                   ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-gray-200 hover:bg-gray-300"} transition`}
               >
-                <span>{demande.expediteur.username}</span>
+                <div className="flex items-center gap-3">
+  <img
+    src={avatarDefault}
+    alt="avatar"
+    className="w-10 h-10 rounded-full object-cover"
+  />
+  <span>{user.username}</span>
+</div>
+
                 <div className="flex gap-2">
                   <button
                     className="bg-green-600 px-3 py-1 rounded hover:bg-green-700 text-white"
@@ -172,7 +182,14 @@ useEffect(() => {
                   className={`p-3 mb-3 rounded flex justify-between items-center transition
                     ${darkMode ? "bg-slate-800 hover:bg-slate-700" : "bg-gray-100 hover:bg-gray-200"}`}
                 >
-                  <span>{user.username}</span>
+                                <div className="flex items-center gap-3">
+  <img
+    src={avatarDefault}
+    alt="avatar"
+    className="w-10 h-10 rounded-full object-cover"
+  />
+  <span>{user.username}</span>
+</div>
                   {demandeEnvoyee ? (
                     <button
                       className="bg-red-600 px-4 py-1 rounded text-white hover:bg-red-700"

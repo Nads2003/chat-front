@@ -1,10 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Sun, Moon, Bell, Menu, X } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import avatar from "../assets/profile.png";
+import { LogOut } from "lucide-react";
+
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // ⚡️ Mode sombre / clair
   const [darkMode, setDarkMode] = useState(
@@ -16,6 +20,19 @@ export default function Navbar() {
 
   // Notifications mock
   const [notifications, setNotifications] = useState(3);
+
+  const navClass = (path) =>
+  `px-3 py-1 rounded transition font-medium
+   ${
+     location.pathname === path
+       ? darkMode
+         ? "text-indigo-400 bg-slate-700"
+         : "text-indigo-600 bg-gray-200"
+       : darkMode
+         ? "text-white hover:text-indigo-400"
+         : "text-black hover:text-indigo-600"
+   }`;
+
 
   // Appliquer mode
   useEffect(() => {
@@ -43,6 +60,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Chat", path: "/chat" },
     { name: "Amis", path: "/add" },
+    
   ];
 
   return (
@@ -63,7 +81,7 @@ export default function Navbar() {
         {navLinks.map(link => (
           <button
             key={link.name}
-            className={`hover:underline ${darkMode ? "text-white" : "text-black"}`}
+            className={navClass(link.path)}
             onClick={() => navigate(link.path)}
           >
             {link.name}
@@ -112,12 +130,19 @@ export default function Navbar() {
         />
 
         {/* Déconnexion */}
-        <button
-          className={`hover:underline ${darkMode ? "text-white" : "text-black"}`}
-          onClick={handleLogout}
-        >
-          Déconnexion
-        </button>
+      <button
+  onClick={handleLogout}
+  title="Déconnexion"
+  className={`p-2 rounded-full transition
+    ${darkMode
+      ? "text-red-400 hover:bg-slate-700 hover:text-red-500"
+      : "text-red-500 hover:bg-gray-200 hover:text-red-600"}
+  `}
+>
+  <LogOut size={20} />
+</button>
+
+
       </div>
 
       {/* Menu Mobile Hamburger */}
@@ -150,6 +175,16 @@ export default function Navbar() {
               {link.name}
             </button>
           ))}
+          <button
+  className={`py-2 text-left hover:underline ${darkMode ? "text-white" : "text-black"}`}
+  onClick={() => {
+    navigate("/profil");
+    setMobileOpen(false);
+  }}
+>
+  Profile
+</button>
+
           <button
             className={`py-2 text-left hover:underline ${darkMode ? "text-white" : "text-black"}`}
             onClick={handleLogout}
