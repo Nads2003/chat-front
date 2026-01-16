@@ -7,11 +7,32 @@ import { UserPlus, Users } from "lucide-react";
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [friends, setFriends] = useState([]);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showPhoto, setShowPhoto] = useState(false);
+
   const [darkMode, setDarkMode] = useState(
     document.documentElement.classList.contains("dark")
   );
 
   const token = localStorage.getItem("access");
+  console.log(token)
+const handleUploadAvatar = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const res = await api.post("/accounts/profile/avatar/", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  setUser(prev => ({ ...prev, avatar: res.data.avatar }));
+  setShowMenu(false);
+};
 
   // Sync theme
   useEffect(() => {
@@ -57,12 +78,43 @@ export default function Profile() {
       <div className="max-w-5xl mx-auto -mt-20 px-6">
         <div className={`${darkMode ? "bg-slate-800" : "bg-white"} rounded-2xl shadow-lg p-6`}>
           <div className="flex flex-col md:flex-row md:items-center gap-6">
-            <img
-              src={user.avatar || avatar}
-              className="w-32 h-32 rounded-full ring-4 ring-white"
-              alt="profile"
-            />
+           <div className="relative">
+  <img
+     src={user.avatar ? user.avatar : avatar}
+    className="w-32 h-32 rounded-full ring-4 ring-white cursor-pointer"
+    onClick={() => setShowMenu(!showMenu)}
+    alt="profile"
+  />
 
+
+  {showMenu && (
+    <div className={`absolute top-36 left-0 w-48 rounded-lg shadow-lg z-50
+      ${darkMode ? "bg-slate-800" : "bg-white"}`}
+    >
+      <label className="block px-4 py-2 hover:bg-indigo-500 hover:text-white cursor-pointer">
+        Ajouter / Modifier photo
+        <input
+          type="file"
+          accept="image/*"
+          hidden
+          onChange={handleUploadAvatar}
+        />
+      </label>
+
+      {user.avatar && (
+        <button
+          onClick={() => {
+            setShowPhoto(true);
+            setShowMenu(false);
+          }}
+          className="w-full text-left px-4 py-2 hover:bg-indigo-500 hover:text-white"
+        >
+          Voir photo
+        </button>
+      )}
+    </div>
+  )}
+</div>
             <div className="flex-1">
               <h1 className="text-2xl font-bold">{user.username}</h1>
               <p className="text-sm text-gray-400">{user.email}</p>
@@ -113,6 +165,20 @@ export default function Profile() {
           </div>
         </div>
       </div>
+{showPhoto && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+    onClick={() => setShowPhoto(false)}
+  >
+    <img
+      src={user.avatar}
+      className="max-h-[90vh] max-w-[90vw] rounded-xl"
+      alt="avatar"
+    />
+  </div>
+)}
+
     </div>
+    
   );
 }
