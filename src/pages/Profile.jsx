@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import avatar from "../assets/profile.png";
 import { UserPlus, Users } from "lucide-react";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
+   const navigate = useNavigate();
   const [friends, setFriends] = useState([]);
   const [showMenu, setShowMenu] = useState(false);
   const [showPhoto, setShowPhoto] = useState(false);
@@ -70,6 +72,7 @@ const handleUploadAvatar = async (e) => {
   return (
     <div className={`${darkMode ? "bg-slate-900 text-white" : "bg-gray-100 text-black"} min-h-screen`}>
       <Navbar />
+<div className="pt-20">
 
       {/* Cover */}
       <div className="h-48 bg-gradient-to-r from-indigo-500 to-purple-600" />
@@ -121,9 +124,12 @@ const handleUploadAvatar = async (e) => {
               <p className="mt-3">{user.bio || "Aucune description disponible."}</p>
             </div>
 
-            <button className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-              <UserPlus size={18} />
+            <button className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+             onClick={() => navigate("/add")}>
+              <UserPlus size={18}
+               />
               Ajouter ami
+              
             </button>
           </div>
 
@@ -179,6 +185,7 @@ const handleUploadAvatar = async (e) => {
 )}
 
     </div>
+       </div>
     
   );
 }

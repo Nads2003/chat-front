@@ -123,7 +123,8 @@ useEffect(() => {
       <Navbar />
 
       {/* Contenu principal */}
-      <div className="flex-1 p-6 space-y-6">
+      <div className="flex-1 p-6 space-y-6 pt-20">
+
         {/* Demandes d'amis reçues */}
         {demandesRecues.length > 0 && (
           <div className={`${darkMode ? "bg-slate-800" : "bg-gray-100"} p-4 rounded-lg`}>

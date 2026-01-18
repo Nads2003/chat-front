@@ -4,11 +4,26 @@ import { Sun, Moon, Bell, Menu, X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import avatar from "../assets/profile.png";
 import { LogOut } from "lucide-react";
+import api from "../api/axios";
+
 
 
 export default function Navbar() {
+   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+   const token = localStorage.getItem("access");
+   useEffect(() => {
+    const fetchProfile = async () => {
+      const res = await api.get("/accounts/profile/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(res.data);
+    };
+
+    fetchProfile();
+    
+  }, [token]);
 
   // ⚡️ Mode sombre / clair
   const [darkMode, setDarkMode] = useState(
@@ -65,9 +80,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`px-6 py-4 flex justify-between items-center shadow-lg
-        ${darkMode ? "bg-slate-800 text-white" : "bg-white text-black"}`}
-    >
+  className={`fixed top-0 left-0 w-full z-50 px-6 py-4 flex justify-between items-center shadow-lg
+    ${darkMode ? "bg-slate-800 text-white" : "bg-white text-black"}`}
+>
+
       {/* LOGO */}
       <div
         className="text-2xl font-bold cursor-pointer"
@@ -122,12 +138,13 @@ export default function Navbar() {
 
         {/* Profil */}
         <img
-          src={avatar}
-          alt="Profil"
-          className={`w-8 h-8 rounded-full cursor-pointer hover:ring-2
-            ${darkMode ? "hover:ring-indigo-500" : "hover:ring-indigo-600"}`}
-          onClick={() => navigate("/profil")}
-        />
+  src={user?.avatar || avatar}
+  alt="Profil"
+  className={`w-8 h-8 rounded-full cursor-pointer hover:ring-2
+    ${darkMode ? "hover:ring-indigo-500" : "hover:ring-indigo-600"}`}
+  onClick={() => navigate("/profil")}
+/>
+
 
         {/* Déconnexion */}
       <button
